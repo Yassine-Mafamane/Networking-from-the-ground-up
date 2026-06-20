@@ -1,0 +1,9 @@
+
+# Host-3 network configuration 
+# Interface eth0 is connected to Switch Port 2 (Ethernet-2) 
+# IP: 192.168.0.3/28 
+
+auto eth0
+iface eth0 inet static
+	address 192.168.0.3
+	netmask 255.255.255.240
