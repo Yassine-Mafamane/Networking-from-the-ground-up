@@ -1,0 +1,11 @@
+
+# Host-2 network configuration 
+# Interface eth0 is connected to Switch-1
+# IP: 192.168.0.3/28
+# Gateway: 192.168.0.1 (Router-1 eth0)
+
+auto eth0
+iface eth0 inet static
+	address 192.168.0.3
+	netmask 255.255.255.240
+	gateway 192.168.0.1
