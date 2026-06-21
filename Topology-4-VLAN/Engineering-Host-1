@@ -1,0 +1,10 @@
+# Engineering-Host-1 network configuration 
+# Interface eth0 is connected to Switch1 (port 2, VLAN 20) 
+# IP: 192.168.20.2/28 
+# Gateway: 192.168.20.1 (Router eth0.20)  
+
+auto eth0
+iface eth0 inet static
+	address 192.168.20.2
+	netmask 255.255.255.240
+	gateway 192.168.20.1
