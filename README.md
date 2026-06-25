@@ -27,6 +27,10 @@ you want to explore via `File → Import portable project`.
 | Topology | Concepts |
 |----------|----------|
 | [Topology 1 - Basic Routing](./Topology-1-Basic-Routing/) | IP addressing, subnets, static routing, default gateway |
+| [Topology 2 - Switching](./Topology-2-Switching/) |  |
+| [Topology 3 - Routing And Switching](./Topology-3-Routing-and-Switching/) |  |
+| [Topology 4 - VLAN](./Topology-4-VLAN/) |  |
+| [Topology 5 - OSPF (Dynamic Routing)](./Topology-5-OSPF/) |  |
 | More coming soon... | |
 
 ## Project structure
