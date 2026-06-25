@@ -1,0 +1,48 @@
+# Router-1 network configuration
+# Area 0 (Backbone)
+# Interface eth0 is connected to Host-1
+# Interface eth1 is connected to Router-3 (eth2)
+# Interface eth2 is connected to Router-5 (eth2)
+# Interface eth3 is connected to Router-2 (eth1)
+# eth0 : IP: 192.168.10.1/30
+# eth1 : IP: 192.168.10.5/30
+# eth2 : IP: 192.168.10.9/30
+# eth3 : IP: 192.168.10.13/30
+
+auto lo
+iface lo inet loopback
+	up ip addr add 1.1.1.1/32 dev lo
+
+auto eth0
+iface eth0 inet static
+	address 192.168.10.1
+	netmask 255.255.255.252
+
+auto eth1
+iface eth1 inet static
+	address 192.168.10.5
+	netmask 255.255.255.252
+
+auto eth2
+iface eth2 inet static
+	address 192.168.10.9
+	netmask 255.255.255.252
+
+auto eth3
+iface eth3 inet static
+	address 192.168.10.13
+	netmask 255.255.255.252
+	up printf '#!/bin/sh\n\
+	vtysh -c "configure terminal" \
+	-c "router ospf" \
+	-c "ospf router-id 1.1.1.1" \
+	-c "network 192.168.10.0/30 area 0" \
+	-c "network 192.168.10.4/30 area 0" \
+	-c "network 192.168.10.8/30 area 0" \
+	-c "network 192.168.10.12/30 area 0" \
+	-c "network 1.1.1.1/32 area 0" \
+	-c "end" \
+	-c "write"\n' > /tmp/ospf-init.sh
+	up chmod +x /tmp/ospf-init.sh
+
+

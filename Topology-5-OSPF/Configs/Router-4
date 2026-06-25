@@ -1,0 +1,38 @@
+# Router-4 network configuration 
+# Interface eth0 is connected to Switch-1 (eth2)
+# Interface eth1 is connected to Webserver (eth0) 
+# Interface eth2 is connected to Router-2 (eth0) 
+# eth0 : IP: 192.168.40.1/28
+# eth1 : IP: 192.168.50.1/30
+# eth2 : IP: 192.168.30.2/30
+
+auto lo 
+iface lo inet loopback 
+	up ip addr add 4.4.4.4/32 dev lo
+auto eth0
+iface eth0 inet static
+	address 192.168.40.1
+	netmask 255.255.255.240
+
+auto eth1
+iface eth1 inet static
+	address 192.168.50.1
+	netmask 255.255.255.252
+
+auto eth2
+iface eth2 inet static
+	address 192.168.30.2
+	netmask 255.255.255.252
+	up printf '#!/bin/sh\n\
+	vtysh -c "configure terminal" \
+	-c "router ospf" \
+	-c "ospf router-id 4.4.4.4" \
+	-c "network 192.168.30.0/30 area 1" \
+	-c "network 192.168.40.0/28 area 1" \
+	-c "network 192.168.50.0/30 area 1" \
+	-c "network 4.4.4.4/32 area 1" \
+	-c "end" \
+	-c "write"\n' > /tmp/ospf-init.sh
+	up chmod +x /tmp/ospf-init.sh
+
+

@@ -1,0 +1,39 @@
+# Router-6 network configuration 
+# Interface eth0 is connected to Switch-2 (eth2)
+# Interface eth1 is connected to Router-7 (eth1) 
+# Interface eth2 is connected to Router-5 (eth0) 
+# eth0 : IP: 192.168.70.1/28
+# eth1 : IP: 192.168.60.9/30
+# eth2 : IP: 192.168.60.2/30
+
+auto lo 
+iface lo inet loopback 
+	up ip addr add 6.6.6.6/32 dev lo
+
+auto eth0
+iface eth0 inet static
+	address 192.168.70.1
+	netmask 255.255.255.240
+
+auto eth1
+iface eth1 inet static
+	address 192.168.60.9
+	netmask 255.255.255.252
+
+auto eth2
+iface eth2 inet static
+	address 192.168.60.2
+	netmask 255.255.255.252
+	up printf '#!/bin/sh\n\
+	vtysh -c "configure terminal" \
+	-c "router ospf" \
+	-c "ospf router-id 6.6.6.6" \
+	-c "network 192.168.70.0/28 area 2" \
+	-c "network 192.168.60.9/30 area 2" \
+	-c "network 192.168.60.0/30 area 2" \
+	-c "network 6.6.6.6/32 area 2" \
+	-c "end" \
+	-c "write"\n' > /tmp/ospf-init.sh
+	up chmod +x /tmp/ospf-init.sh
+
+

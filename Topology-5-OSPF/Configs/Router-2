@@ -1,0 +1,28 @@
+# Router-2 network configuration 
+# Interface eth0 is connected to Router-4 (eth2)
+# Interface eth1 is connected to Router-1 (eth3) 
+# eth0 : IP: 192.168.30.1/30
+# eth1 : IP: 192.168.10.14/30
+
+auto lo 
+iface lo inet loopback 
+	up ip addr add 2.2.2.2/32 dev lo
+auto eth0
+iface eth0 inet static
+	address 192.168.30.1
+	netmask 255.255.255.252
+
+auto eth1
+iface eth1 inet static
+	address 192.168.10.14
+	netmask 255.255.255.252
+	up printf '#!/bin/sh\n\
+	vtysh -c "configure terminal" \
+	-c "router ospf" \
+	-c "ospf router-id 2.2.2.2" \
+	-c "network 192.168.10.12/30 area 0" \
+	-c "network 192.168.30.0/30 area 1" \
+	-c "network 2.2.2.2/32 area 0" \
+	-c "end" \
+	-c "write"\n' > /tmp/ospf-init.sh
+	up chmod +x /tmp/ospf-init.sh
